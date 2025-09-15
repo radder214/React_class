@@ -38,6 +38,7 @@ class App extends Component {
 
   // 컴포넌트가 '맨 처음' 화면에 render 됐을 때 실행되는 함수
   // 컴포넌트가 처음 만들어져 DOM에 추가될 때
+  // render function => componentDidMount function 순으로 호출
   componentDidMount() {
     console.log(`Component rendered - componentDidMount function`);
   }
