@@ -1,59 +1,24 @@
 import React from "react";
-import axios from "axios";
-import Movie from "./Movie";
+import { BrowserRouter, Route } from "react-router-dom";
+import Home from "./routes/Home";
+import About from "./routes/About";
+import Detail from "./routes/Detail";
+import Navigation from "./components/Navigation";
 import "./App.css";
 
-class App extends React.Component {
-  state = {
-    isLoading : true,
-    movies : []
-  }
-
-  getMovies = async () => {
-    // Destructuring assignment
-    const {
-      data : {
-        data : {movies}
-      }
-    } = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by=rating");
-    this.setState({movies, isLoading : false}); // = this.setState({movies : movies, isLoading : false});
-  }
-
-  componentDidMount() {
-    this.getMovies();
-  }
-
-  render() {
-    const { isLoading } = this.state; // Destructuring assignment
-    return (
-      <section className="container">
-        {
-          isLoading
-          ? (
-            <div className="loader">
-              <span className="loader__text">Loading...</span>
-            </div>
-          )
-          : (
-            <div className="movies">
-              {
-                this.state.movies.map((item, index) => {
-                  return <Movie 
-                          key={index}
-                          year={item.year}
-                          title={item.title}
-                          summary={item.summary}
-                          poster={item.medium_cover_image}
-                          genres={item.genres}
-                        />
-                })
-              }
-            </div>
-          )
-        }
-      </section>
-    );
-  }
+function App() {
+  return (
+    <BrowserRouter>
+      <Navigation />
+      {/* 
+        URL의 정확한 일치를 위해 첫 번째 <Route>에 exact={true} 속성 추가 
+        해당 속성이 없으면 URL에 /about을 입력하면 Home, About 컴포넌트가 동시에 한 화면에 보인다.
+      */}
+      <Route path="/" component={Home} exact={true} />
+      <Route path="/about" component={About} /> {/* path와 component 속성 값이 같을 필요는 없음 */}
+      <Route path="/movie/:id" component={Detail} />
+    </BrowserRouter>
+  )
 }
 
 export default App;
